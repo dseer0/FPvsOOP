@@ -56,6 +56,6 @@ class EngineTest1 extends Game {
       .getOrElse(Snake.move(snake, snake.move, food))
     snake = x
     food = y //TODO poprawic
-    lastMove = None
+    lastMove = None//
   }
 }
