@@ -1,4 +1,4 @@
-package main
+package main.snake_fp
 
 object Config {
   val cellSize = 25

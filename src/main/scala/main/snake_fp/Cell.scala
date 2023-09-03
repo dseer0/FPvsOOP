@@ -1,16 +1,27 @@
-package main
+package main.snake_fp
 
-import com.badlogic.gdx.graphics.{Color, Pixmap, Texture}
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.graphics.{Color, Pixmap, Texture}
 
 case class Cell(x: Int, y: Int, color: Color, texture: Texture) {
   def move(byX: Int, byY: Int): Cell = {
-    Cell(this.x + byX, this.y + byY, color, texture)
+    Cell(this.x + byX, this.y + byY, color, texture).fixOffsets
+  }
+
+  private def fixOffsets: Cell = {
+    if(this.x >= Config.widthInCells) this.copy(x = 0)
+    else if(this.x < 0) this.copy(x = Config.widthInCells - 1)
+    else if (this.y >= Config.heightInCells) this.copy(y = 0)
+    else if (this.y < 0) this.copy(y = Config.heightInCells - 1)
+    else this
   }
 
   def collides(cell: Cell): Boolean = {
     cell.x == x && cell.y == y
+  }
+
+  def collides(cells: Seq[Cell]): Boolean = {
+    cells.exists(this.collides)
   }
 }
 
@@ -25,9 +36,9 @@ object Cell {
     val pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888)
     pixmap.setColor(color)
     pixmap.fillRectangle(0, 0, width, height)
-    val t = new Texture(pixmap)
+    val texture = new Texture(pixmap)
     pixmap.dispose()
-    t
+    texture
   }
 
 
